@@ -1,0 +1,21 @@
+{
+  "name": "Panbeh VPN",
+  "short_name": "Panbeh",
+  "description": "اینترنت پرسرعت، امن و بدون محدودیت",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFF5C0",
+  "theme_color": "#FFA500",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}

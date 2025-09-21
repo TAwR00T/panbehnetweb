@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    
+    <!-- SEO Meta Tags -->
+    <title>پنبه VPN | اینترنت پرسرعت، امن و بدون محدودیت</title>
+    <meta name="description" content="پنبه VPN با ارائه اینترنت پرسرعت، امن و بدون محدودیت، تجربه‌ای بی‌نظیر از دنیای آنلاین را برای شما به ارمغان می‌آورد. با رمزگذاری نظامی و پشتیبانی ۲۴ ساعته." />
+    <meta name="keywords" content="VPN, وی پی ان, اینترنت آزاد, فیلترشکن, امنیت, حریم خصوصی, پنبه, panbeh vpn" />
+    <meta name="author" content="Panbeh VPN" />
+    <link rel="canonical" href="https://www.panbeh.vpn/" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Favicon & PWA -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#FFA500">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.panbeh.vpn/" />
+    <meta property="og:title" content="پنبه VPN | اینترنت پرسرعت، امن و بدون محدودیت" />
+    <meta property="og:description" content="به دنیای آزاد اینترنت با پنبه VPN قدم بگذارید. سرعت، امنیت و پایداری را با ما تجربه کنید." />
+    <meta property="og:image" content="https://www.panbeh.vpn/og-image.png" /> 
+    <!-- Note: An actual 1200x630px image file should be created at this path -->
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://www.panbeh.vpn/" />
+    <meta name="twitter:title" content="پنبه VPN | اینترنت پرسرعت، امن و بدون محدودیت" />
+    <meta name="twitter:description" content="به دنیای آزاد اینترنت با پنبه VPN قدم بگذارید. سرعت، امنیت و پایداری را با ما تجربه کنید." />
+    <meta name="twitter:image" content="https://www.panbeh.vpn/twitter-image.png" />
+    <!-- Note: An actual 1200x675px image file should be created at this path -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: 'Vazirmatn', sans-serif;
+      }
+    </style>
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Panbeh VPN",
+      "operatingSystem": "Windows, macOS, Linux, Android, iOS",
+      "applicationCategory": "SecurityApplication",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "5.0",
+        "reviewCount": "100000"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "990000",
+        "priceCurrency": "IRR",
+        "description": "اشتراک ماهانه پنبه پرو"
+      },
+      "description": "پنبه VPN با ارائه اینترنت پرسرعت، امن و بدون محدودیت، تجربه‌ای بی‌نظیر از دنیای آنلاین را برای شما به ارمغان می‌آورد.",
+      "url": "https://www.panbeh.vpn/"
+    }
+    </script>
+    
+  <script type="importmap">
+{
+  "imports": {
+    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.0.2",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
+    "cors": "https://aistudiocdn.com/cors@^2.8.5",
+    "dotenv/": "https://aistudiocdn.com/dotenv@^17.2.2/",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.544.0",
+    "framer-motion": "https://aistudiocdn.com/framer-motion@^12.23.12",
+    "express": "https://aistudiocdn.com/express@^5.1.0",
+    "react/": "https://aistudiocdn.com/react@^19.1.1/",
+    "react": "https://aistudiocdn.com/react@^19.1.1",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.19.0",
+    "node-fetch": "https://aistudiocdn.com/node-fetch@^3.3.2",
+    "vite": "https://aistudiocdn.com/vite@^7.1.5"
+  }
+}
+</script>
+</head>
+  <body class="antialiased">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').then(registration => {
+            console.log('Panbeh SW registered: ', registration);
+          }).catch(registrationError => {
+            console.log('Panbeh SW registration failed: ', registrationError);
+          });
+        });
+      }
+    </script>
+  </body>
+</html>
