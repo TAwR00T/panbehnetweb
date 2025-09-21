@@ -41,10 +41,11 @@ app.use(cors());
 app.use(express.json());
 
 const { MARZBAN_API_BASE_URL, MARZBAN_ADMIN_USERNAME, MARZBAN_ADMIN_PASSWORD } = process.env;
+let isApiProxyEnabled = true;
 
 if (!MARZBAN_API_BASE_URL || !MARZBAN_ADMIN_USERNAME || !MARZBAN_ADMIN_PASSWORD) {
-  console.error("FATAL ERROR: Marzban environment variables are not set.");
-  process.exit(1);
+  console.warn("WARNING: Marzban environment variables are not fully set. API proxy will be disabled.");
+  isApiProxyEnabled = false;
 }
 
 let accessToken = null;
@@ -89,6 +90,9 @@ async function getMarzbanToken() {
 
 // Middleware to ensure we have a valid token for all Marzban requests
 const marzbanAuthMiddleware = async (req, res, next) => {
+  if (!isApiProxyEnabled) {
+    return res.status(503).json({ detail: 'API proxy is not configured on the server.', summary: 'سرویس چت هوشمند در حال حاضر در دسترس نیست.' });
+  }
   try {
     const token = await getMarzbanToken();
     req.marzbanToken = token;
@@ -179,7 +183,7 @@ const __dirname = path.dirname(__filename);
 app.use(express.static(path.join(__dirname, 'dist')));
 
 // The "catchall" handler for client-side routing
-app.get('*', (req, res) => {
+app.get('*', (req, res, next) => {
     // If the request is not for an API endpoint, serve the main HTML file.
     if (!req.path.startsWith('/api/')) {
         res.sendFile(path.join(__dirname, 'dist', 'index.html'));

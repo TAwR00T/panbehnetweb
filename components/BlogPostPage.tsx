@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { posts, Post } from '../mock-posts';
@@ -103,7 +104,7 @@ const BlogPostPage = ({ slug }: { slug: string }) => {
             animate={{ opacity: 1, y: 0 }} 
             transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <img src={post.featuredImage} alt={post.title} className="w-full h-auto object-cover" loading="lazy" decoding="async" />
+          <img src={post.featuredImage} alt={`تصویر اصلی مقاله: ${post.title}`} className="w-full h-auto object-cover" loading="lazy" decoding="async" />
         </motion.div>
 
         <motion.div 
