@@ -2,64 +2,66 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, PanInfo } from 'framer-motion';
 import { Star, ChevronLeft, ChevronRight, LoaderCircle, AlertTriangle } from 'lucide-react';
 
-// Hardcoded data has been removed from here. It will now be fetched.
-const mockTestimonials = [
-    { name: "سارا احمدی", role: "طراح گرافیک - تهران", avatar: "👩‍🎨", text: "واقعاً به یه چیز دیگه به جز پنبه فکر نمی‌کنم! سرعتش فوق‌العاده‌ست و قطعی نداره. برای من که کارم با اینترنته، عالیه.", rating: 5, date: "۲ ماه پیش" },
-    { name: "علی رضایی", role: "دانشجو", avatar: "🧑‍🎓", text: "پشتیبانی‌شون خیلی بامزه و سریعه! نصف شب پیام دادم و زیر ۵ دقیقه جوابمو دادن. دمشون گرم.", rating: 5, date: "۱ هفته پیش" },
-    { name: "مریم حسینی", role: "فریلنسر", avatar: "👩‍💻", text: "مینی‌اپ تلگرامش زندگی رو راحت کرده. دیگه لازم نیست از تلگرام بیام بیرون. همه چی همونجاست.", rating: 5, date: "۳ ماه پیش" },
-    { name: "رضا محمدی", role: "گیمر", avatar: "🎮", text: "پینگ پایینی که با سرورهای گیمینگ پنبه میگیرم باورنکردنیه. بازی‌ها بدون لگ اجرا میشن.", rating: 5, date: "۱ ماه پیش" },
-    { name: "فاطمه کاظمی", role: "مادر", avatar: "🤱", text: "با پلن خانواده هم من و هم همسرم وصلیم و هم بچه‌ها با خیال راحت تو اینترنت امن می‌گردن. محافظت کودکش عالیه.", rating: 5, date: "۳ هفته پیش" },
-];
+// --- Data Type based on WordPress REST API ---
+interface Testimonial {
+    id: number;
+    acf: {
+        name: string;
+        role: string;
+        avatar: string;
+        text: string;
+        rating: number;
+        date: string;
+    }
+}
 
-
-const TestimonialCard = ({ testimonial }) => (
+const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => (
     <div className="w-full h-full flex-shrink-0 bg-white/60 backdrop-blur-xl rounded-3xl shadow-lg p-6 text-right border border-gray-200/80 flex flex-col transition-all duration-300 hover:border-orange-300">
         <div className="flex items-center mb-3">
-            <span className="text-4xl p-3 bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-full shadow-inner">{testimonial.avatar}</span>
+            <span className="text-4xl p-3 bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-full shadow-inner">{testimonial.acf.avatar}</span>
             <div className="mr-4">
-                <h4 className="font-bold text-gray-800">{testimonial.name}</h4>
-                <p className="text-sm text-gray-500">{testimonial.role}</p>
+                <h4 className="font-bold text-gray-800">{testimonial.acf.name}</h4>
+                <p className="text-sm text-gray-500">{testimonial.acf.role}</p>
             </div>
             <div className="mr-auto flex items-center gap-1">
-                {[...Array(testimonial.rating)].map((_, i) => (
+                {[...Array(testimonial.acf.rating)].map((_, i) => (
                     <Star key={i} size={16} className="text-yellow-400 fill-yellow-400" />
                 ))}
             </div>
         </div>
-        <p className="text-gray-700 leading-relaxed mb-3 flex-grow">"{testimonial.text}"</p>
-        <p className="text-xs text-gray-400">{testimonial.date}</p>
+        <p className="text-gray-700 leading-relaxed mb-3 flex-grow">"{testimonial.acf.text}"</p>
+        <p className="text-xs text-gray-400">{testimonial.acf.date}</p>
     </div>
 );
 
 const TestimonialsSection = () => {
     const [activeIndex, setActiveIndex] = useState(0);
     const [isHovered, setIsHovered] = useState(false);
-    const [testimonials, setTestimonials] = useState([]);
+    const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchTestimonials = async () => {
             try {
-                // =================================================================
-                // DEVELOPER NOTE: This is where you will fetch data from your WordPress API.
-                // Replace the mocked data below with your actual fetch call.
-                //
-                // Example:
-                // const response = await fetch('https://your-wordpress-site.com/wp-json/wp/v2/testimonials');
-                // if (!response.ok) throw new Error('Network response was not ok');
-                // const data = await response.json();
-                // setTestimonials(data);
-                //
-                // نکته برای توسعه‌دهنده: اینجا جایی است که اطلاعات را از وردپرس خود دریافت می‌کنید.
-                // کد شبیه‌سازی شده زیر را با کد واقعی فراخوانی API جایگزین کنید.
-                // =================================================================
-
-                // Simulating a network request for demonstration
-                await new Promise(resolve => setTimeout(resolve, 2000));
+                // Try fetching plural form first, which is standard
+                let response = await fetch('/api/wp/v2/testimonials?_embed&acf_format=standard');
                 
-                // Set the mocked data
-                setTestimonials(mockTestimonials);
+                // If plural fails (e.g., 404), try singular form as a fallback
+                if (!response.ok) {
+                    console.warn("Could not fetch 'testimonials' (plural), trying 'testimonial' (singular)...");
+                    response = await fetch('/api/wp/v2/testimonial?_embed&acf_format=standard');
+                }
+
+                if (!response.ok) {
+                    // Create a more informative error message for debugging
+                    const errorBody = await response.json().catch(() => ({}));
+                    const errorMessage = errorBody?.message || 'Network response was not ok';
+                    throw new Error(`Failed to fetch testimonials. Status: ${response.status}. Message: ${errorMessage}`);
+                }
+
+                const data = await response.json();
+                setTestimonials(data);
                 
             } catch (err) {
                 setError("متاسفانه در دریافت نظرات مشکلی پیش آمد. لطفاً بعداً تلاش کنید.");
@@ -142,7 +144,7 @@ const TestimonialsSection = () => {
 
                             return (
                                 <motion.div
-                                    key={index}
+                                    key={testimonial.id}
                                     className="absolute w-[45%] h-full"
                                     style={{ cursor: offset !== 0 ? 'pointer' : 'default' }}
                                     initial={false}
@@ -175,14 +177,13 @@ const TestimonialsSection = () => {
                 <div className="lg:hidden flex flex-col items-center gap-8">
                      <div className="relative w-full max-w-[85vw] h-[320px] flex items-center justify-center">
                         <AnimatePresence>
-                             {/* The stack is created by mapping a few cards based on activeIndex */}
                              {testimonials.slice(activeIndex, activeIndex + 3).reverse().map((testimonial) => {
                                 const indexInStack = testimonials.indexOf(testimonial) - activeIndex;
                                 const isTopCard = indexInStack === 0;
 
                                 return (
                                     <motion.div
-                                        key={testimonial.name}
+                                        key={testimonial.id}
                                         className="absolute w-full h-[280px]"
                                         style={{
                                             cursor: isTopCard ? 'grab' : 'default',
@@ -195,7 +196,7 @@ const TestimonialsSection = () => {
                                             zIndex: testimonials.length - indexInStack,
                                         }}
                                         exit={{
-                                            x: -300, // Fling off to the left
+                                            x: -300,
                                             opacity: 0,
                                             transition: { duration: 0.2 }
                                         }}

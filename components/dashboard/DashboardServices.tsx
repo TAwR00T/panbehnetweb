@@ -1,9 +1,9 @@
-
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PanbehCharacterAnimated } from '../PanbehCharacterAnimated';
 import { Button } from '../ui/button';
 import { List, ChevronLeft, QrCode, Clipboard, Check, ChevronDown, Monitor, Smartphone } from 'lucide-react';
+import { showToast } from '../../App'; // Import the global toast function
 
 const subscription = {
     name: 'پنبه پرو',
@@ -66,6 +66,7 @@ const ActiveServiceView = () => {
     const handleCopy = () => {
         navigator.clipboard.writeText(subscription.link);
         setCopied(true);
+        showToast('لینک با موفقیت کپی شد!'); // Use the global toast function
         setTimeout(() => setCopied(false), 2000);
     };
 

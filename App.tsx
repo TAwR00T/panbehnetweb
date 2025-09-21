@@ -1,7 +1,56 @@
 
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LoaderCircle } from 'lucide-react';
+import { LoaderCircle, CheckCircle } from 'lucide-react';
+
+// --- Global Toast Notification System ---
+const toastEventEmitter = new EventTarget();
+export const showToast = (message: string) => {
+    toastEventEmitter.dispatchEvent(new CustomEvent('showtoast', { detail: message }));
+};
+
+const Toast = () => {
+    const [toast, setToast] = useState<{ message: string; id: number } | null>(null);
+
+    useEffect(() => {
+        const handleShowToast = (e: Event) => {
+            const customEvent = e as CustomEvent;
+            setToast({ message: customEvent.detail, id: Date.now() });
+        };
+        
+        toastEventEmitter.addEventListener('showtoast', handleShowToast);
+        
+        return () => {
+            toastEventEmitter.removeEventListener('showtoast', handleShowToast);
+        };
+    }, []);
+
+    useEffect(() => {
+        if (toast) {
+            const timer = setTimeout(() => setToast(null), 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [toast]);
+
+    return (
+        <AnimatePresence>
+            {toast && (
+                <motion.div
+                    layout
+                    initial={{ opacity: 0, y: 50, scale: 0.8 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 20, scale: 0.8 }}
+                    className="fixed bottom-24 lg:bottom-10 left-1/2 -translate-x-1/2 z-[200] px-6 py-3 bg-gray-900/80 backdrop-blur-md text-white font-bold rounded-full shadow-lg flex items-center gap-3 border border-white/20"
+                >
+                    <CheckCircle size={20} className="text-green-400" />
+                    {toast.message}
+                </motion.div>
+            )}
+        </AnimatePresence>
+    );
+};
+// --- End of Toast System ---
+
 
 // Loader component to be used as a fallback for Suspense
 const FullPageLoader = () => (
@@ -19,12 +68,10 @@ const CursorLightEffect = lazy(() => import('./components/CursorLightEffect'));
 const BackgroundPattern = lazy(() => import('./components/BackgroundPattern'));
 const SunbeamEffect = lazy(() => import('./components/SunbeamEffect'));
 const AuthModal = lazy(() => import('./components/AuthModal'));
-// FIX: Lazy load the named export `DashboardLayout` from `./components/Dashboard` to fix component type issue.
 const DashboardLayout = lazy(() => import('./components/Dashboard').then(module => ({ default: module.DashboardLayout })));
 const LandingPage = lazy(() => import('./components/LandingPage'));
 const BlogPage = lazy(() => import('./components/BlogPage'));
 const BlogPostPage = lazy(() => import('./components/BlogPostPage'));
-// FIX: Lazy load the named export `DashboardAiChat` to make it available in the component.
 const DashboardAiChat = lazy(() => import('./components/dashboard/DashboardAiChat').then(module => ({ default: module.DashboardAiChat })));
 
 
@@ -91,7 +138,7 @@ export default function App() {
     const path = window.location.pathname;
 
     if (path.startsWith('/blog/')) {
-        const slug = path.substring(6); // Remove '/blog/'
+        const slug = path.substring(6);
         return <BlogPostPage slug={slug} />;
     }
 
@@ -99,7 +146,6 @@ export default function App() {
         return <BlogPage />;
     }
     
-    // Default to landing page for '/' or any other path
     return <LandingPage />;
   };
 
@@ -179,6 +225,8 @@ export default function App() {
             </motion.div>
         )}
       </AnimatePresence>
+
+      <Toast />
     </motion.main>
   );
 }
