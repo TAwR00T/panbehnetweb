@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, PanInfo } from 'framer-motion';
 import { Star, ChevronLeft, ChevronRight, LoaderCircle, AlertTriangle } from 'lucide-react';
@@ -158,7 +157,7 @@ const TestimonialsSection = () => {
                     </div>
                     
                     <div className="flex items-center gap-6">
-                        <motion.button onClick={handlePrev} className="p-3 bg-white/70 backdrop-blur-md rounded-full shadow-lg hover:bg-white transition-colors border border-white/30" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                        <motion.button onClick={handlePrev} className="p-3 bg-white/70 backdrop-blur-md rounded-full shadow-lg hover:bg-white transition-colors border border-white/30" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} aria-label="نظر قبلی">
                             <ChevronRight size={24} className="text-gray-700" />
                         </motion.button>
                         <div className="flex gap-2">
@@ -166,7 +165,7 @@ const TestimonialsSection = () => {
                                 <button key={index} onClick={() => goToIndex(index)} className={`w-3 h-3 rounded-full transition-all duration-300 ${activeIndex === index ? 'bg-orange-500 w-6' : 'bg-gray-300 hover:bg-gray-400'}`} />
                             ))}
                         </div>
-                        <motion.button onClick={handleNext} className="p-3 bg-white/70 backdrop-blur-md rounded-full shadow-lg hover:bg-white transition-colors border border-white/30" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                        <motion.button onClick={handleNext} className="p-3 bg-white/70 backdrop-blur-md rounded-full shadow-lg hover:bg-white transition-colors border border-white/30" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} aria-label="نظر بعدی">
                             <ChevronLeft size={24} className="text-gray-700" />
                         </motion.button>
                     </div>
@@ -212,7 +211,7 @@ const TestimonialsSection = () => {
                         </AnimatePresence>
                     </div>
                      <div className="flex items-center gap-6">
-                        <motion.button onClick={handlePrev} className="p-3 bg-white/70 backdrop-blur-md rounded-full shadow-lg hover:bg-white transition-colors border border-white/30" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                        <motion.button onClick={handlePrev} className="p-3 bg-white/70 backdrop-blur-md rounded-full shadow-lg hover:bg-white transition-colors border border-white/30" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} aria-label="نظر قبلی">
                             <ChevronRight size={24} className="text-gray-700" />
                         </motion.button>
                         <div className="flex gap-2">
@@ -220,7 +219,7 @@ const TestimonialsSection = () => {
                                 <button key={index} onClick={() => goToIndex(index)} className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${activeIndex === index ? 'bg-orange-500 w-5' : 'bg-gray-300 hover:bg-gray-400'}`} />
                             ))}
                         </div>
-                        <motion.button onClick={handleNext} className="p-3 bg-white/70 backdrop-blur-md rounded-full shadow-lg hover:bg-white transition-colors border border-white/30" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                        <motion.button onClick={handleNext} className="p-3 bg-white/70 backdrop-blur-md rounded-full shadow-lg hover:bg-white transition-colors border border-white/30" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} aria-label="نظر بعدی">
                             <ChevronLeft size={24} className="text-gray-700" />
                         </motion.button>
                     </div>

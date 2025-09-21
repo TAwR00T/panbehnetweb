@@ -2,9 +2,40 @@ import express from 'express';
 import cors from 'cors';
 import fetch from 'node-fetch';
 import 'dotenv/config';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 const app = express();
 const port = process.env.PORT || 3001;
+
+// --- Security Headers Middleware ---
+app.use((req, res, next) => {
+    // A comprehensive Content-Security-Policy to prevent XSS attacks.
+    res.setHeader(
+        'Content-Security-Policy',
+        "default-src 'self' aistudiocdn.com; " +
+        "script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com aistudiocdn.com; " +
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+        "img-src 'self' data: https://images.unsplash.com; " +
+        "font-src 'self' https://fonts.gstatic.com; " +
+        "connect-src 'self' /api/marzban/* https://fonts.googleapis.com https://fonts.gstatic.com; " +
+        "frame-src 'self' https://www.youtube.com; " +
+        "object-src 'none'; " +
+        "base-uri 'self';"
+    );
+    // Enforce HTTPS
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+    // Prevent Clickjacking
+    res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+    // Prevent MIME-sniffing
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    // Control referrer information
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    // Isolate cross-origin popups
+    res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+    next();
+});
+
 
 app.use(cors());
 app.use(express.json());
@@ -139,6 +170,23 @@ router.post('/user/:username/reset', (req, res) => {
 // Revoke User Subscription
 router.post('/user/:username/revoke_sub', (req, res) => {
   proxyRequest(req, res, `/api/user/${req.params.username}/revoke_sub`, 'POST');
+});
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// --- Static File Serving for Production ---
+app.use(express.static(path.join(__dirname, 'dist')));
+
+// The "catchall" handler for client-side routing
+app.get('*', (req, res) => {
+    // If the request is not for an API endpoint, serve the main HTML file.
+    if (!req.path.startsWith('/api/')) {
+        res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+    } else {
+        // Let API 404s fall through to Express's default handler
+        next();
+    }
 });
 
 

@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { posts, Post } from '../mock-posts';
@@ -41,7 +40,7 @@ const PostCard = ({ post, isFeatured = false }: { post: Post, isFeatured?: boole
                         </div>
                     </div>
                      <div className="h-64 lg:h-auto overflow-hidden">
-                        <img src={post.featuredImage} alt={post.title} className="w-full h-full object-cover" />
+                        <img src={post.featuredImage} alt={post.title} className="w-full h-full object-cover" loading="lazy" decoding="async" />
                     </div>
                 </div>
             </motion.div>
@@ -58,7 +57,7 @@ const PostCard = ({ post, isFeatured = false }: { post: Post, isFeatured?: boole
             whileHover={{ y: -8, boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04)' }}
         >
             <a href={`/blog/${post.slug}`} className="block h-48 overflow-hidden">
-                <img src={post.featuredImage} alt={post.title} className="w-full h-full object-cover transition-transform duration-300 hover:scale-105" />
+                <img src={post.featuredImage} alt={post.title} className="w-full h-full object-cover transition-transform duration-300 hover:scale-105" loading="lazy" decoding="async" />
             </a>
             <div className="p-6 flex flex-col flex-grow text-right">
                 <span className="px-3 py-1 bg-purple-100 text-purple-700 font-bold rounded-full text-xs self-start">{post.category}</span>

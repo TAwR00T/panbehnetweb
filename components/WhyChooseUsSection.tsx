@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PanbehCharacterAnimated } from './PanbehCharacterAnimated';
@@ -191,6 +190,7 @@ const WhyChooseUsSection = () => {
                                         onClick={() => setSelected(index)}
                                         className="w-full p-4 flex items-center justify-between text-right font-bold"
                                         aria-expanded={isSelected}
+                                        aria-controls={`feature-desc-${index}`}
                                     >
                                         <div className="flex items-center gap-4">
                                             <motion.div 
@@ -209,6 +209,7 @@ const WhyChooseUsSection = () => {
                                     <AnimatePresence>
                                         {isSelected && (
                                             <motion.section
+                                                id={`feature-desc-${index}`}
                                                 initial={{ opacity: 0, height: 0 }}
                                                 animate={{ opacity: 1, height: 'auto' }}
                                                 exit={{ opacity: 0, height: 0 }}
