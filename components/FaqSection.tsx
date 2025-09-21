@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, MessageCircle, Shield, Power, Globe, KeyRound, Users, Sparkles } from 'lucide-react';
@@ -83,13 +84,18 @@ const FaqSection = () => {
                     {filteredFaqs.map(item => (
                         <motion.div 
                             key={item.id} 
-                            className={`bg-white/70 backdrop-blur-lg rounded-2xl shadow-md cursor-pointer border ${item.isImportant ? 'border-orange-400' : 'border-white/30'}`}
+                            className={`bg-white/70 backdrop-blur-lg rounded-2xl shadow-md border ${item.isImportant ? 'border-orange-400' : 'border-white/30'} overflow-hidden`}
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5 }}
                             layout
                         >
-                            <header className="p-5 flex justify-between items-start" onClick={() => setOpenId(openId === item.id ? null : item.id)}>
+                            <button 
+                                className="p-5 flex justify-between items-start w-full text-right" 
+                                onClick={() => setOpenId(openId === item.id ? null : item.id)}
+                                aria-expanded={openId === item.id}
+                                aria-controls={`faq-answer-${item.id}`}
+                            >
                                 <div className="flex items-start gap-3">
                                      <span className={`p-2 mt-1 rounded-full text-white bg-gradient-to-br ${item.isImportant ? 'from-orange-500 to-yellow-500' : 'from-gray-400 to-gray-500'}`}>{item.icon}</span>
                                      <div className="flex flex-col items-start">
@@ -99,16 +105,19 @@ const FaqSection = () => {
                                                 <span>پیشنهاد پنبه</span>
                                             </div>
                                         )}
-                                        <span className="font-bold text-gray-800 text-base">{item.q}</span>
+                                        <span id={`faq-question-${item.id}`} className="font-bold text-gray-800 text-base">{item.q}</span>
                                      </div>
                                 </div>
                                 <motion.div animate={{ rotate: openId === item.id ? 180 : 0 }} className="mt-1.5 flex-shrink-0 ml-[-4px]">
                                     <ChevronDown className="text-gray-500" />
                                 </motion.div>
-                            </header>
+                            </button>
                             <AnimatePresence>
                                 {openId === item.id && (
                                     <motion.section
+                                        id={`faq-answer-${item.id}`}
+                                        role="region"
+                                        aria-labelledby={`faq-question-${item.id}`}
                                         initial={{ height: 0, opacity: 0, marginTop: 0 }}
                                         animate={{ height: 'auto', opacity: 1, marginTop: '-0.5rem' }}
                                         exit={{ height: 0, opacity: 0, marginTop: 0 }}

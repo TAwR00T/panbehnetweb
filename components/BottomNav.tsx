@@ -7,9 +7,9 @@ import { PanbehCharacterAnimated } from './PanbehCharacterAnimated';
 const navItems = [
     { id: 'home', icon: <Home size={24} />, href: '#home', label: 'خانه' },
     { id: 'features', icon: <Rocket size={24} />, href: '#features', label: 'ویژگی‌ها' },
-    { id: 'cta', icon: null, href: '#plans', label: 'شروع' },
-    { id: 'chat', icon: <Bot size={24} />, href: '#', label: 'چت‌بات' },
-    { id: 'faq', icon: <MessageCircleQuestion size={24} />, href: '#faq', label: 'سوالات' },
+    { id: 'cta', icon: null, href: '#plans', label: 'شروع رایگان و خرید پلن' },
+    { id: 'chat', icon: <Bot size={24} />, href: '#', label: 'چت‌بات هوشمند' },
+    { id: 'faq', icon: <MessageCircleQuestion size={24} />, href: '#faq', label: 'سوالات متداول' },
 ];
 
 const useActiveSection = (sectionIds: string[]) => {

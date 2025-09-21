@@ -43,9 +43,10 @@ const stepVariants = {
 };
 
 // --- A simple styled input component ---
-const FormInput = ({ icon, ...props }) => (
+const FormInput = ({ icon, id, ...props }) => (
     <div className="relative">
         <input
+            id={id}
             {...props}
             className="w-full bg-white/70 border-2 border-gray-200 rounded-full px-4 py-3 pr-12 placeholder:text-gray-400 placeholder:font-medium placeholder:text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent transition-all"
         />
@@ -182,7 +183,8 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onLoginSuccess }
                                                 </Button>
                                                 <div className="flex items-center gap-4"><hr className="flex-grow border-gray-200"/><span className="text-sm text-gray-500 font-semibold">یا</span><hr className="flex-grow border-gray-200"/></div>
                                                 <div className="flex flex-col gap-3">
-                                                    <input type="tel" placeholder="شماره موبایل خود را وارد کنید" value={phoneNumber} onChange={e => setPhoneNumber(e.target.value)}
+                                                    <label htmlFor="phone-number" className="sr-only">شماره موبایل خود را وارد کنید</label>
+                                                    <input id="phone-number" type="tel" placeholder="شماره موبایل خود را وارد کنید" value={phoneNumber} onChange={e => setPhoneNumber(e.target.value)}
                                                         className="w-full text-center tracking-wider font-bold text-lg bg-white/70 border-2 border-gray-200 rounded-full px-4 py-3 placeholder:text-gray-400 placeholder:font-medium placeholder:text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent transition-all"
                                                     />
                                                     <Button onClick={handleContinue} className="w-full rounded-full bg-gradient-to-r from-orange-500 to-yellow-500 text-white font-bold px-6 py-3 shadow-lg hover:shadow-orange-400/50 transition-all">ادامه</Button>
@@ -196,7 +198,8 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onLoginSuccess }
                                             <h2 className="text-2xl font-extrabold text-gray-800 mb-2">ورود به حساب</h2>
                                             <p className="text-gray-600 mb-8">شماره شما: <span className="font-bold tracking-wider">{phoneNumber}</span></p>
                                             <div className="space-y-4">
-                                                <FormInput type="password" placeholder="رمز عبور خود را وارد کنید" icon={<KeyRound size={18} />} />
+                                                <label htmlFor="login-password" className="sr-only">رمز عبور خود را وارد کنید</label>
+                                                <FormInput id="login-password" type="password" placeholder="رمز عبور خود را وارد کنید" icon={<KeyRound size={18} />} />
                                                 <Button onClick={handleLogin} className="w-full rounded-full bg-gradient-to-r from-orange-500 to-yellow-500 text-white font-bold px-6 py-3 shadow-lg hover:shadow-orange-400/50 transition-all">ورود</Button>
                                             </div>
                                         </div>
@@ -207,8 +210,10 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onLoginSuccess }
                                             <h2 className="text-2xl font-extrabold text-gray-800 mb-2">ساخت حساب جدید</h2>
                                             <p className="text-gray-600 mb-6">فقط چند قدم تا ماجراجویی مونده!</p>
                                             <div className="space-y-3">
-                                                <FormInput type="text" placeholder="نام کامل" icon={<User size={18} />} value={fullName} onChange={e => setFullName(e.target.value)} />
-                                                <FormInput type="password" placeholder="یک رمز عبور قوی انتخاب کن" icon={<KeyRound size={18} />} value={password} onChange={e => setPassword(e.target.value)} />
+                                                <label htmlFor="register-name" className="sr-only">نام کامل</label>
+                                                <FormInput id="register-name" type="text" placeholder="نام کامل" icon={<User size={18} />} value={fullName} onChange={e => setFullName(e.target.value)} />
+                                                <label htmlFor="register-password" className="sr-only">یک رمز عبور قوی انتخاب کن</label>
+                                                <FormInput id="register-password" type="password" placeholder="یک رمز عبور قوی انتخاب کن" icon={<KeyRound size={18} />} value={password} onChange={e => setPassword(e.target.value)} />
                                                 <Button onClick={handleRegister} className="w-full mt-2 rounded-full bg-gradient-to-r from-orange-500 to-yellow-500 text-white font-bold px-6 py-3 shadow-lg hover:shadow-orange-400/50 transition-all">ساخت حساب</Button>
                                             </div>
                                         </div>

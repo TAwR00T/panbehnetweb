@@ -1,18 +1,32 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import BubbleBg from './components/BubbleBg';
-import CursorLightEffect from './components/CursorLightEffect';
-import BackgroundPattern from './components/BackgroundPattern';
-import SunbeamEffect from './components/SunbeamEffect';
-import AuthModal from './components/AuthModal';
-import { DashboardLayout } from './components/Dashboard';
-import { DashboardAiChat } from './components/dashboard/DashboardAiChat';
-import LandingPage from './components/LandingPage';
-import BlogPage from './components/BlogPage';
-import BlogPostPage from './components/BlogPostPage';
+import { LoaderCircle } from 'lucide-react';
+
+// Loader component to be used as a fallback for Suspense
+const FullPageLoader = () => (
+    <div className="fixed inset-0 flex justify-center items-center bg-white/50">
+        <LoaderCircle size={48} className="text-orange-500 animate-spin" />
+    </div>
+);
+
+
+// Lazy load all major components
+const Header = lazy(() => import('./components/Header'));
+const Footer = lazy(() => import('./components/Footer'));
+const BubbleBg = lazy(() => import('./components/BubbleBg'));
+const CursorLightEffect = lazy(() => import('./components/CursorLightEffect'));
+const BackgroundPattern = lazy(() => import('./components/BackgroundPattern'));
+const SunbeamEffect = lazy(() => import('./components/SunbeamEffect'));
+const AuthModal = lazy(() => import('./components/AuthModal'));
+// FIX: Lazy load the named export `DashboardLayout` from `./components/Dashboard` to fix component type issue.
+const DashboardLayout = lazy(() => import('./components/Dashboard').then(module => ({ default: module.DashboardLayout })));
+const LandingPage = lazy(() => import('./components/LandingPage'));
+const BlogPage = lazy(() => import('./components/BlogPage'));
+const BlogPostPage = lazy(() => import('./components/BlogPostPage'));
+// FIX: Lazy load the named export `DashboardAiChat` to make it available in the component.
+const DashboardAiChat = lazy(() => import('./components/dashboard/DashboardAiChat').then(module => ({ default: module.DashboardAiChat })));
+
 
 export default function App() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -106,32 +120,36 @@ export default function App() {
         ease: 'linear'
       }}
     >
-      <CursorLightEffect />
-      <SunbeamEffect />
-      <BackgroundPattern /> 
-      <BubbleBg />
+      <Suspense fallback={null}>
+        <CursorLightEffect />
+        <SunbeamEffect />
+        <BackgroundPattern /> 
+        <BubbleBg />
+      </Suspense>
       
-      {isAuthenticated ? (
-        <DashboardLayout 
-          userName={userName} 
-          onLogout={handleLogout} 
-          hasActivePlan={hasActivePlan}
-          onPlanPurchase={handlePlanPurchase}
+      <Suspense fallback={<FullPageLoader />}>
+        {isAuthenticated ? (
+          <DashboardLayout 
+            userName={userName} 
+            onLogout={handleLogout} 
+            hasActivePlan={hasActivePlan}
+            onPlanPurchase={handlePlanPurchase}
+          />
+        ) : (
+          <>
+            <Header />
+            {renderPage()}
+            <Footer />
+          </>
+        )}
+
+        <AuthModal 
+          isOpen={isAuthModalOpen && !isAuthenticated} 
+          onClose={() => setIsAuthModalOpen(false)}
+          onLoginSuccess={handleLogin}
         />
-      ) : (
-        <>
-          <Header />
-          {renderPage()}
-          <Footer />
-        </>
-      )}
-
-      <AuthModal 
-        isOpen={isAuthModalOpen && !isAuthenticated} 
-        onClose={() => setIsAuthModalOpen(false)}
-        onLoginSuccess={handleLogin}
-      />
-
+      </Suspense>
+      
       <AnimatePresence>
         {isChatOpen && (
             <motion.div
@@ -149,12 +167,14 @@ export default function App() {
                     transition={{ type: 'spring', stiffness: 200, damping: 25 }}
                     onClick={(e) => e.stopPropagation()}
                 >
-                    <DashboardAiChat 
-                        onNavigate={() => {}}
-                        isStandalone={true}
-                        onClose={() => setIsChatOpen(false)}
-                        userName={userName}
-                    />
+                    <Suspense fallback={<FullPageLoader />}>
+                      <DashboardAiChat 
+                          onNavigate={() => {}}
+                          isStandalone={true}
+                          onClose={() => setIsChatOpen(false)}
+                          userName={userName}
+                      />
+                    </Suspense>
                 </motion.div>
             </motion.div>
         )}
